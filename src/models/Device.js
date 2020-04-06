@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
 
 const DeviceSchema = new mongoose.Schema({
-    phone: Number,
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
+    nome: String,
+    modelo: String,    
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
