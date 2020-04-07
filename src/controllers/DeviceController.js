@@ -1,6 +1,6 @@
 const Device = require('../models/Device');
 
-let contador = 0;
+let contador = 1;
 var mud = 1586185682411;
 var hoje = new Date();
 
@@ -33,7 +33,13 @@ module.exports = {
     },
 
     async update(req, res) {
-        if(hoje > mud) {            
+        if(hoje > mud) {
+            function adicionarDiasData(dias){
+                var dataVenc = new Date(hoje.getTime() + (dias * 24 * 60 * 60 * 1000));
+
+                return dataVenc.getDate() + "/" + (dataVenc.getMonth() + 1)+ "/" + dataVenc.getFullYear();
+            }
+            
             var novaData = adicionarDiasData(30);
             mud = novaData;
 
@@ -41,18 +47,19 @@ module.exports = {
 
         return res.json(device);
         }else{
-            return res.send({ error: `Você poderá fazer uma nova mudança na data: ${mud}` })
+            return res.send({ error: `Você poderá fazer uma nova mudança a partir de: ${mud}` })
         }
     },
 
     async destroy(req, res){
-        if(hoje > mud) {
+        if(hoje > mud && contador != 1) {
             await Device.findByIdAndRemove(req.params.id);
 
             contador--
             return res.send();
+
         }else{
-            return res.send({ error: `Você poderá fazer uma nova mudança ${mud}` })
+            return res.send({ error: `Você poderá fazer uma nova mudança a partir de: ${mud}` })
         }
     }
 
